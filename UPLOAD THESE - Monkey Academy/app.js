@@ -6,7 +6,7 @@
   const views = ["v-login", "v-home", "v-player", "v-q", "v-result"];
   const PREVIEW = !CFG.API_URL;
 
-  let user = null;          // {pin, name, site, results:{M1:{status,score,total,date}}}
+  let user = null;          // {cred, name, site, results:{M1:{status,score,total,date}}}
   let mod = null, idx = 0, score = 0, answered = [], ccOn = true;
 
   const store = {
@@ -32,19 +32,20 @@
 
   // ---------- LOGIN ----------
   $("preview-note").hidden = !PREVIEW;
-  $("preview-go").onclick = () => { user = { pin: "", name: "Preview", site: "", results: {} }; home(); };
+  $("preview-go").onclick = () => { user = { cred: {}, name: "Preview", site: "", results: {} }; home(); };
 
   $("login-form").onsubmit = async (e) => {
     e.preventDefault();
-    const pin = $("pin").value.trim();
+    const initials = $("initials").value.trim().toUpperCase();
+    const phone4 = $("phone4").value.trim();
     const msg = $("login-msg");
-    if (!/^\d{4}$/.test(pin)) { msg.textContent = "Your PIN is 4 numbers."; msg.className = "msg err"; return; }
+    if (!/^[A-Z]{2,3}$/.test(initials) || !/^\d{4}$/.test(phone4)) { msg.textContent = "Enter your initials (2 or 3 letters) and the last 4 digits of your phone."; msg.className = "msg err"; return; }
     if (PREVIEW) { msg.textContent = "Preview mode: use 'Continue as preview' below."; msg.className = "msg err"; return; }
     msg.textContent = "Checking..."; msg.className = "msg";
     try {
-      const r = await api({ action: "login", pin });
-      if (!r.ok) { msg.textContent = r.error || "PIN not recognised. Check with your manager."; msg.className = "msg err"; return; }
-      user = { pin, name: r.name, site: r.site, results: r.results || {}, rewards: r.rewards || null };
+      const r = await api({ action: "login", initials, phone4 });
+      if (!r.ok) { msg.textContent = r.error || "Details not recognised. Check with your manager."; msg.className = "msg err"; return; }
+      user = { cred: { initials, phone4 }, name: r.name, site: r.site, results: r.results || {}, rewards: r.rewards || null };
       store.set("ma_user", user);
       home();
     } catch (err) {
@@ -52,7 +53,7 @@
     }
   };
 
-  $("logout").onclick = () => { store.del("ma_user"); user = null; $("pin").value = ""; $("who").textContent = ""; show("v-login"); };
+  $("logout").onclick = () => { store.del("ma_user"); user = null; $("initials").value = ""; $("phone4").value = ""; $("who").textContent = ""; show("v-login"); };
 
   // ---------- HOME ----------
   function home() {
@@ -174,7 +175,7 @@
     user.results[mod.id] = { status: passed ? "PASS" : "FAIL", score, total, date: new Date().toISOString() };
     if (PREVIEW) { save.textContent = "Preview mode: this result was not saved."; save.className = "msg"; return; }
     save.textContent = "Saving your result..."; save.className = "msg";
-    const payload = { action: "result", pin: user.pin, module: mod.id, moduleTitle: mod.title, score, total, passed, answers: answered };
+    const payload = { action: "result", ...user.cred, module: mod.id, moduleTitle: mod.title, score, total, passed, answers: answered };
     for (let attempt = 1; attempt <= 3; attempt++) {
       try {
         const r = await api(payload);
@@ -189,5 +190,5 @@
 
   // ---------- BOOT ----------
   const saved = store.get("ma_user");
-  if (saved && !PREVIEW) { user = saved; home(); } else show("v-login");
+  if (saved && saved.cred && !PREVIEW) { user = saved; home(); } else show("v-login");
 })();
