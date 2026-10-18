@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Monkey Academy</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23111'/%3E%3Ctext x='32' y='43' font-size='30' text-anchor='middle' fill='%23f2b33d' font-family='Arial' font-weight='700'%3EMA%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="top">
+  <div class="brand"><img src="https://square-web-production-f.squarecdn.com/files/869926224c7daad9dad6ce9ce82b39aa09d6fdd6/original.png" alt="TWM" onerror="this.remove()"><span>Monkey Academy</span></div>
+  <div id="who" class="who"></div>
+</header>
+
+<main id="app">
+  <!-- LOGIN -->
+  <section id="v-login" class="view">
+    <div class="card narrow">
+      <p class="kicker">Staff training</p>
+      <h1>Log in</h1>
+      <p class="muted">Enter your 4-digit Monkey Academy PIN. Your manager has it. It is not your Square till code.</p>
+      <form id="login-form" autocomplete="off">
+        <input id="pin" inputmode="numeric" pattern="[0-9]*" maxlength="4" placeholder="••••" aria-label="PIN">
+        <button class="btn primary" type="submit">Log in</button>
+      </form>
+      <p id="login-msg" class="msg"></p>
+      <p id="preview-note" class="note" hidden>Preview mode: the results sheet isn't connected yet, so nothing is saved. <button class="link" id="preview-go">Continue as preview</button></p>
+    </div>
+  </section>
+
+  <!-- HOME -->
+  <section id="v-home" class="view" hidden>
+    <p class="kicker">Your training</p>
+    <h1 id="hello">Hello</h1>
+    <div id="modules" class="modules"></div>
+    <button class="link" id="logout">Log out</button>
+  </section>
+
+  <!-- PLAYER -->
+  <section id="v-player" class="view" hidden>
+    <div class="progress"><div id="bar"></div></div>
+    <div id="stage" class="stage"></div>
+    <p id="caption" class="caption"></p>
+    <div class="controls">
+      <button class="btn ghost" id="b-back">Back</button>
+      <button class="btn ghost" id="b-replay">Replay</button>
+      <button class="btn ghost" id="b-cc" aria-pressed="true">Subtitles on</button>
+      <button class="btn primary" id="b-next" disabled>Next</button>
+    </div>
+    <p class="hint" id="hint">Listen to the end to carry on.</p>
+  </section>
+
+  <!-- QUESTION -->
+  <section id="v-q" class="view" hidden>
+    <div class="card">
+      <p class="kicker" id="q-count">Question</p>
+      <h2 id="q-text"></h2>
+      <div id="q-opts" class="opts"></div>
+      <div id="q-fb" class="fb" hidden></div>
+      <button class="btn primary" id="q-next" hidden>Continue</button>
+    </div>
+  </section>
+
+  <!-- RESULT -->
+  <section id="v-result" class="view" hidden>
+    <div class="card narrow center">
+      <p class="kicker">Module complete</p>
+      <div id="r-badge" class="badge"></div>
+      <h1 id="r-title"></h1>
+      <p id="r-score" class="score"></p>
+      <p id="r-save" class="msg"></p>
+      <div class="row">
+        <button class="btn ghost" id="r-retry">Do it again</button>
+        <button class="btn primary" id="r-home">Back to my training</button>
+      </div>
+    </div>
+  </section>
+</main>
+<audio id="audio" preload="auto"></audio>
+<script src="config.js"></script>
+<script src="captions.js"></script>
+<script src="m1-private-hire.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
