@@ -20,9 +20,12 @@
     <div class="card narrow">
       <p class="kicker">Staff training</p>
       <h1>Log in</h1>
-      <p class="muted">Enter your 4-digit Monkey Academy PIN. Your manager has it. It is not your Square till code.</p>
-      <form id="login-form" autocomplete="off">
-        <input id="pin" inputmode="numeric" pattern="[0-9]*" maxlength="4" placeholder="••••" aria-label="PIN">
+      <p class="muted">Enter your initials and the last 4 digits of the phone number Square has for you.</p>
+      <form id="login-form" autocomplete="off" class="login-form">
+        <label for="initials">Initials</label>
+        <input id="initials" maxlength="3" placeholder="AJ" autocapitalize="characters" aria-label="Initials">
+        <label for="phone4">Last 4 digits of your phone</label>
+        <input id="phone4" inputmode="numeric" pattern="[0-9]*" maxlength="4" placeholder="••••" aria-label="Last 4 digits of your phone">
         <button class="btn primary" type="submit">Log in</button>
       </form>
       <p id="login-msg" class="msg"></p>
